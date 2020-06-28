@@ -41,6 +41,11 @@ body {
   }
 }
 
+.active > span {
+  color: green;
+  font-weight: bold;
+}
+
 /* Layout */
 
 .wrapper {
@@ -93,7 +98,7 @@ body {
 
 /* Authors */
 
-.authors {
+.meals {
   li {
     margin-bottom: 12px;
   }
@@ -103,12 +108,13 @@ body {
 
 .post {
   display: none;
-  &.active {
-    display: block;
-  }
 }
 
-.post-author {
+.active {
+    display: block;
+  }
+
+.post-meal {
   font-style: italic;
 }
 
