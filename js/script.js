@@ -220,7 +220,7 @@ function generateMeals(){
     const meal = article.getAttribute('data-meal');
     console.log('meal: ', meal);
 	
-    const linkHTML = '<li><a href="#' + meal + '"><span>' + meal + '</span></a></li>';
+    const linkHTML = '<a href="#' + meal + '"><span>' + meal + '</span></a>';
     console.log('linkHTML: ', linkHTML);
       
     mealWraper.innerHTML = mealWraper.inerHTML + linkHTML;
