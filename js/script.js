@@ -48,7 +48,7 @@ const optArticleSelector = '.post',
 optTitleSelector = '.post-title',
 optTitleListSelector = '.titles';
 
-function generateTitleLinks() { //deklaracja
+function generateTitleLinks(customSelector = '') { //deklaracja
 
 	/* [1] remove contents of titleList */
 		
@@ -59,7 +59,7 @@ function generateTitleLinks() { //deklaracja
 
 	/* [2] for each article */
 		
-	const articles = document.querySelectorAll('.post');
+	const articles = document.querySelectorAll(optArticleSelector + customSelector);
 
 	for(let article of articles) {
 		console.log('article: ', article);
@@ -164,7 +164,7 @@ function tagClickHandler(event){
   	console.log('TAG: ', tag);
 
   /* find all tag links with class active */
-  const activeLinks = document.querySelectorAll('.list-horizontal a.active');
+  const activeLinks = document.querySelectorAll('.list-horizontal a.active');     //  ewent.? ('a.active[href^="#tag-"]') ?
 
   /* START LOOP: for each active tag link */
   for(let activeLink of activeLinks) {
@@ -176,7 +176,7 @@ function tagClickHandler(event){
   }
 
   /* find all tag links with "href" attribute equal to the "href" constant */
-  tagLinks = document.querySelector(href)
+  tagLinks = document.querySelector('+(href)+')
 
   /* START LOOP: for each found tag link */
   for(let tagLink of tagLinks){
@@ -188,7 +188,7 @@ function tagClickHandler(event){
   }
 
   /* execute function "generateTitleLinks" with article selector as argument */
-  
+  generateTitleLinks('[data-tags~="' + tag + '"]');
 }
 
 function addClickListenersToTags(){
