@@ -128,7 +128,7 @@ function generateTags(){
 	  console.log('linkHTML: ', linkHTML);
 
       /* add generated code to html variable */
-	  tagsWraper.innerHTML = tagsWraper.inerHTML + linkHTML;
+	  tagsWraper.innerHTML = tagsWraper.innerHTML + linkHTML;
 	  console.log('tagsWraper: ', tagsWraper);
 	  
 	  
@@ -223,7 +223,7 @@ function generateMeals(){
     const linkHTML = '<a href="#' + meal + '"><span>' + meal + '</span></a>';
     console.log('linkHTML: ', linkHTML);
       
-    mealWraper.innerHTML = mealWraper.inerHTML + linkHTML;
+    mealWraper.innerHTML = mealWraper.innerHTML + linkHTML;
     console.log('mealWraper: ', mealWraper);
   }
 }
