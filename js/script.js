@@ -206,3 +206,26 @@ function addClickListenersToTags(){
 }
 
 addClickListenersToTags();
+
+
+// cz.4. dodanie listy Rodzaje dań
+
+function generateMeals(){
+  const articles = document.querySelectorAll(optArticleSelector); 
+  
+  for(let article of articles) {
+    const mealWraper = article.querySelector('.post-meal');
+    console.log('mealsWraper: ', mealWraper);
+    
+    const meal = article.getAttribute('data-meal');
+    console.log('meal: ', meal);
+	
+    const linkHTML = '<li><a href="#' + meal + '"><span>' + meal + '</span></a></li>';
+    console.log('linkHTML: ', linkHTML);
+      
+    mealWraper.innerHTML = mealWraper.inerHTML + linkHTML;
+    console.log('mealWraper: ', mealWraper);
+  }
+}
+
+generateMeals();
