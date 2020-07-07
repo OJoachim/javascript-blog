@@ -229,3 +229,34 @@ function generateMeals(){
 }
 
 generateMeals();
+
+// cz.4b. Akcja po kliknięciu w danie (meal)
+
+function mealClickHandler(event){
+  event.preventDefault();
+  const clickedElement = this;
+  console.log('Link was clicked!');
+
+  const href = clickedElement.getAttribute('href');
+  const meal = href.replace('#', '');
+
+  const activeLinks = document.querySelectorAll('.post-meal a.active');
+  for(let activeLink of activeLinks) {
+	activeLink.classList.remove('active');
+  }
+
+  /* find all tag links with "href" attribute equal to the "href" constant */
+  mealLinks = document.querySelector('+(href)+');
+
+  for(let mealLink of mealLinks){
+	mealLink.classList.add('active');
+  }
+  generateTitleLinks('[data-meal="' + meal + '"');
+}
+
+function addClickListenersToMeals(){
+ //   
+ 
+}
+
+addClickListenersToMeals();
