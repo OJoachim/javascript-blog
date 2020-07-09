@@ -93,7 +93,7 @@ generateTitleLinks(); // wywołanie
 
 // 3. część zadania, generowanie listy tagów;
 
-const optArticleTagsSelector = '.post-tags .list-horizontal' 
+const optArticleTagsSelector = '.post-tags .list' 
 
 function generateTags(){
   /* find all articles */
@@ -116,7 +116,7 @@ function generateTags(){
 	console.log('articleTags: ', articleTags);
   
     /* split tags into array */
-	const articleTagsArray = articleTags.split(' '); //oddzielenie w tablicy
+	const articleTagsArray = articleTags.split(' ');
 	console.log('tagsTable: ', articleTagsArray);
   
     /* START LOOP: for each tag */
@@ -128,14 +128,15 @@ function generateTags(){
 	  console.log('linkHTML: ', linkHTML);
 
       /* add generated code to html variable */
-	  
-	  tagsWraper.innerHTML = tagsWraper.innerHTML + linkHTML;
+	  tagsWraper.innerHTML = tagsWraper.inerHTML + linkHTML;
 	  console.log('tagsWraper: ', tagsWraper);
+	  
 	  
     /* END LOOP: for each tag */
 	}
 
     /* insert HTML of all the links into the tags wrapper */
+	
   
   /* END LOOP: for every article: */
   }
@@ -208,90 +209,58 @@ function addClickListenersToTags(){
 addClickListenersToTags();
 
 
-// cz.4. dodanie listy Rodzaje dań
+// cz.5. budowanie tablicy z tagami + liczba wystąpień
+function generateTags(){
+  /* 1.create a new variable allTags with an empty array */
+  let allTags = [];
 
-function generateMeal(){
-  const articles = document.querySelectorAll(optArticleSelector); 
-  
+  /* find all articles */
+  const articles = document.querySelectorAll('.post');
+
   /* START LOOP: for every article: */
+  for every article: */
   for(let article of articles) {
 
-    /* find meals wrapper */
-	const mealWraper = article.querySelector('.post-meal');
-  console.log('mealWraper: ', mealWraper);
-  
+    /* find tags wrapper */
+	const tagsWraper = article.querySelector(optArticleTagsSelector);
+
     /* make html variable with empty string */
-	//let html = '';
+	let html = '';
 
-    /* get meal from data-meal attribute */
-	const meal = article.getAttribute('data-meal');
-	console.log('meal: ', meal);
-	
-    /* generate HTML of the link */
-	  const linkHTML = '<a href="#' + meal + '"><span>' + meal + '</span></a>';
-	  console.log('linkHTML: ', linkHTML);
+    /* get tags from data-tags attribute */
+	const articleTags = article.getAttribute('data-tags');
 
-      /* add generated code to html variable */
-	  mealWraper.innerHTML = mealWraper.innerHTML + linkHTML;
-	  console.log('mealWraper: ', mealWraper);  
+    /* split tags into array */
+	const articleTagsArray = articleTags.split(' ');
+
+    /* START LOOP: for each tag */
+	for(let tag of articleTagsArray){
+		console.log('tag: ', tag);
+
+      /* generate HTML of the link */
+	  const linkHTML = '<li><a href="#tag-' + tag + '"><span>' + tag + '</span></a></li>';
+
+     
+	  tagsWraper.innerHTML = tagsWraper.inerHTML + linkHTML;
+
+
+      /* [NEW] check if this link is NOT already in allTags */
+      if(allTags.indexOf(linkHTML) == -1){
+        /* [NEW] add generated code to allTags array */
+        allTags.push(linkHTML);
+      }
+
+    /* END LOOP: for each tag */
+	}
 
     /* insert HTML of all the links into the tags wrapper */
-	
-  
+
   /* END LOOP: for every article: */
   }
+
+  /* [NEW] find list of tags in right column */
+  const tagList = document.querySelector('.tags');
+
+  /* [NEW] add html from allTags to tagList */
+  tagList.innerHTML = allTags.join(' ');
 }
-
-generateMeal();
-
-
-// cz.4b. Akcja po kliknięciu w danie (meal)
-
-function mealClickHandler(event){
-  event.preventDefault();
-  const clickedElement = this;
-  console.log('Link was clicked!');
-
-  /* make a new constant "href" and read the attribute "href" of the clicked element */
-  const href = clickedElement.getAttribute('href');
-
-  /* make a new constant "meal" and extract tag from the "href" constant */
-  const meal = href.replace('#', '');
-
-  const activeLinks = document.querySelectorAll('.post-meal a.active');
-  for(let activeLink of activeLinks) {
-	activeLink.classList.remove('active');
-  }
-
-  /* find all tag links with "href" attribute equal to the "href" constant */
-  mealLinks = document.querySelector('+(href)+');
-
-  /* START LOOP: for each found tag link */
-  for(let mealLink of mealLinks){
-
-    /* add class active */
-	mealLink.classList.add('active');
-
-  /* END LOOP: for each found tag link */
-  }
-
-  /* execute function "generateTitleLinks" with article selector as argument */
-  generateTitleLinks('data-meal="' + meal + '"');
-  
-}
-
-function addClickListenersToMeal(){
-  /* find all links to tags */    
-  
-
-  /* START LOOP: for each link */
-  
-
-    /* add tagClickHandler as event listener for that link */
-	
-
-  /* END LOOP: for each link */
-  
-}
-
-addClickListenersToMeal();

@@ -93,6 +93,10 @@ body {
 .list-horizontal {
   li {
     display: inline-block;
+	margin-inline-end: 10px;
+  }
+  span {
+    padding: 10px;
   }
 }
 

@@ -84,6 +84,12 @@ body {
 
 .list-horizontal li {
   display: inline-block;
+  -webkit-margin-end: 10px;
+          margin-inline-end: 10px;
+}
+
+.list-horizontal span {
+  padding: 10px;
 }
 
 /* Meals */
