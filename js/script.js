@@ -91,6 +91,7 @@ function generateTitleLinks(customSelector = '') { //deklaracja
 generateTitleLinks(); // wywołanie
 
 
+
 // 3. część zadania, generowanie listy tagów;
 
 const optArticleTagsSelector = '.post-tags .list-horizontal' 
@@ -136,6 +137,7 @@ function generateTags(){
 	}
 
     /* insert HTML of all the links into the tags wrapper */
+	
   
   /* END LOOP: for every article: */
   }
@@ -186,27 +188,27 @@ function tagClickHandler(event){
   /* END LOOP: for each found tag link */
   }
 
-  /* execute function "generateTitleLinks" with article selector as argument */
-  generateTitleLinks('[data-tags~="' + tag + '"]');
   
-}
 
 function addClickListenersToTags(){
   /* find all links to tags */    
-  
+  const links = document.querySelectorAll('.list-horizontal');
 
   /* START LOOP: for each link */
-  
-
+  for(let link of links) {
+  		
     /* add tagClickHandler as event listener for that link */
-	
+	link.addEventListener('click', tagClickHandler);
 
   /* END LOOP: for each link */
-  
+  }
 }
 
 addClickListenersToTags();
-
+/* execute function "generateTitleLinks" with article selector as argument */
+  generateTitleLinks('[data-tags~="' + tag + '"]');
+  
+}
 
 // cz.4. dodanie listy Rodzaje dań
 
@@ -244,7 +246,6 @@ function generateMeal(){
 
 generateMeal();
 
-
 // cz.4b. Akcja po kliknięciu w danie (meal)
 
 function mealClickHandler(event){
@@ -254,6 +255,7 @@ function mealClickHandler(event){
 
   /* make a new constant "href" and read the attribute "href" of the clicked element */
   const href = clickedElement.getAttribute('href');
+  console.log('href: ', href);
 
   /* make a new constant "meal" and extract tag from the "href" constant */
   const meal = href.replace('#', '');
@@ -264,7 +266,7 @@ function mealClickHandler(event){
   }
 
   /* find all tag links with "href" attribute equal to the "href" constant */
-  mealLinks = document.querySelector('+(href)+');
+  mealLinks = document.querySelector('+ href +');
 
   /* START LOOP: for each found tag link */
   for(let mealLink of mealLinks){
@@ -275,23 +277,19 @@ function mealClickHandler(event){
   /* END LOOP: for each found tag link */
   }
 
-  /* execute function "generateTitleLinks" with article selector as argument */
+
+  function addClickListenersToMeal(){
+    /* find all links to tags */    
+    const links = document.querySelectorAll('.post-meal');
+
+    for(let link of links) {
+  		link.addEventListener('click', tagClickHandler);
+    }
+  }
+
+  addClickListenersToMeal();
+
+ /* execute function "generateTitleLinks" with article selector as argument */
   generateTitleLinks('data-meal="' + meal + '"');
   
 }
-
-function addClickListenersToMeal(){
-  /* find all links to tags */    
-  
-
-  /* START LOOP: for each link */
-  
-
-    /* add tagClickHandler as event listener for that link */
-	
-
-  /* END LOOP: for each link */
-  
-}
-
-addClickListenersToMeal();
