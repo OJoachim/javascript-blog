@@ -98,16 +98,12 @@ const optArticleTagsSelector = '.post-tags .list-horizontal'
 
 function generateTags(){
   /* find all articles */
-  const articles = document.querySelectorAll('.post'); // przypomnienie: const optArticleSelector = '.post',
-  console.log('articles ', optArticleSelector);
+  const articles = document.querySelectorAll('.post');
   
-  /* START LOOP: for every article: */
   for(let article of articles) {
-    console.log('article: ', article);
 
     /* find tags wrapper */
 	const tagsWraper = article.querySelector(optArticleTagsSelector);
-  console.log('tagsWraper: ', tagsWraper);
   
     /* make html variable with empty string */
 	let html = '';
@@ -117,43 +113,27 @@ function generateTags(){
 	console.log('articleTags: ', articleTags);
   
     /* split tags into array */
-	const articleTagsArray = articleTags.split(' '); //oddzielenie w tablicy
+	const articleTagsArray = articleTags.split(' ');
 	console.log('tagsTable: ', articleTagsArray);
-  
-    /* START LOOP: for each tag */
+    
 	for(let tag of articleTagsArray){
 		console.log('tag: ', tag);
-
-      /* generate HTML of the link */
+      
 	  const linkHTML = '<li><a href="#tag-' + tag + '"><span>' + tag + '</span></a></li>';
 	  console.log('linkHTML: ', linkHTML);
 
-      /* add generated code to html variable */
-	  
 	  tagsWraper.innerHTML = tagsWraper.innerHTML + linkHTML;
 	  console.log('tagsWraper: ', tagsWraper);
-	  
-    /* END LOOP: for each tag */
 	}
-
-    /* insert HTML of all the links into the tags wrapper */
-	
-  
-  /* END LOOP: for every article: */
   }
 }
-
 generateTags();
 
 
 // cz.3b. Akcja po kliknięciu w tag
 
 function tagClickHandler(event){
-	
-  /* prevent default action for this event */
   event.preventDefault();
-
-  /* make new constant named "clickedElement" and give it the value of "this" */
   const clickedElement = this;
   console.log('Link was clicked!');
 
@@ -165,85 +145,45 @@ function tagClickHandler(event){
   	console.log('TAG: ', tag);
 
   /* find all tag links with class active */
-  const activeLinks = document.querySelectorAll('a.active[href^="#tag-"]'); //.list-horizontal a.active
-
-  /* START LOOP: for each active tag link */
+  const activeLinks = document.querySelectorAll('a.active[href^="#tag-"]');
+  
   for(let activeLink of activeLinks) {
-
-    /* remove class active */
 	activeLink.classList.remove('active');
-
-  /* END LOOP: for each active tag link */
   }
 
   /* find all tag links with "href" attribute equal to the "href" constant */
   tagLinks = document.querySelector('+(href)+');
 
-  /* START LOOP: for each found tag link */
   for(let tagLink of tagLinks){
-
-    /* add class active */
 	tagLink.classList.add('active');
+  } 
 
-  /* END LOOP: for each found tag link */
+  function addClickListenersToTags(){
+    /* find all links to tags */    
+    const links = document.querySelectorAll('.list-horizontal');
+    for(let link of links) {
+	  link.addEventListener('click', tagClickHandler);
+    }
   }
-
+  addClickListenersToTags();
   
-
-function addClickListenersToTags(){
-  /* find all links to tags */    
-  const links = document.querySelectorAll('.list-horizontal');
-
-  /* START LOOP: for each link */
-  for(let link of links) {
-  		
-    /* add tagClickHandler as event listener for that link */
-	link.addEventListener('click', tagClickHandler);
-
-  /* END LOOP: for each link */
-  }
+ /* execute function "generateTitleLinks" with article selector as argument */
+  generateTitleLinks('[data-tags~="' + tag + '"]');  
 }
 
-addClickListenersToTags();
-/* execute function "generateTitleLinks" with article selector as argument */
-  generateTitleLinks('[data-tags~="' + tag + '"]');
-  
-}
 
 // cz.4. dodanie listy Rodzaje dań
 
 function generateMeal(){
   const articles = document.querySelectorAll(optArticleSelector); 
   
-  /* START LOOP: for every article: */
   for(let article of articles) {
-
-    /* find meals wrapper */
-	const mealWraper = article.querySelector('.post-meal');
-  console.log('mealWraper: ', mealWraper);
-  
-    /* make html variable with empty string */
-	//let html = '';
-
-    /* get meal from data-meal attribute */
+	const mealWraper = article.querySelector('.post-meal'); // meals wrapper
 	const meal = article.getAttribute('data-meal');
-	console.log('meal: ', meal);
-	
-    /* generate HTML of the link */
-	  const linkHTML = '<a href="#' + meal + '"><span>' + meal + '</span></a>';
-	  console.log('linkHTML: ', linkHTML);
-
-      /* add generated code to html variable */
-	  mealWraper.innerHTML = mealWraper.innerHTML + linkHTML;
-	  console.log('mealWraper: ', mealWraper);  
-
-    /* insert HTML of all the links into the tags wrapper */
-	
-  
-  /* END LOOP: for every article: */
+	const linkHTML = '<a href="#' + meal + '"><span>' + meal + '</span></a>';
+	mealWraper.innerHTML = mealWraper.innerHTML + linkHTML;
   }
 }
-
 generateMeal();
 
 // cz.4b. Akcja po kliknięciu w danie (meal)
@@ -267,29 +207,18 @@ function mealClickHandler(event){
 
   /* find all tag links with "href" attribute equal to the "href" constant */
   mealLinks = document.querySelector('+ href +');
-
-  /* START LOOP: for each found tag link */
-  for(let mealLink of mealLinks){
-
-    /* add class active */
+  
+  for(let mealLink of mealLinks){  //LOOP: for each found tag link
 	mealLink.classList.add('active');
-
-  /* END LOOP: for each found tag link */
   }
 
-
-  function addClickListenersToMeal(){
-    /* find all links to tags */    
+  function addClickListenersToMeal(){  
     const links = document.querySelectorAll('.post-meal');
-
     for(let link of links) {
   		link.addEventListener('click', tagClickHandler);
     }
   }
-
   addClickListenersToMeal();
 
- /* execute function "generateTitleLinks" with article selector as argument */
-  generateTitleLinks('data-meal="' + meal + '"');
-  
+  generateTitleLinks('data-meal="' + meal + '"');  
 }
