@@ -105,6 +105,10 @@ body {
 .meals {
   li {
     margin-bottom: 12px;
+    a {
+	 text-decoration: none;
+	 color: grey;
+	}
   }
 }
 
@@ -120,11 +124,48 @@ body {
 
 .post-meal {
   font-style: italic;
+  a {
+	 text-decoration: none;
+	 color: grey;
+	}
 }
 
 .post-tags {
   display: flex;
   p {
     margin: 0 10px 0 0;
+  }
+}
+
+.tags {
+  li {
+    display: inline-block;
+    margin-inline-end: 10px;
+  }
+  span {
+    padding: 10px;
+  }
+}
+
+.tags {
+  .tag-size-1 {
+    font-size: 50%;
+    color: green;
+  }
+  .tag-size-2 {
+    font-size: 70%;
+    color: red;
+  }
+  .tag-size-3 {
+    font-size: 90%;
+    color: grey;
+  }
+  .tag-size-4 {
+    font-size: 105%;
+    color: yellow;
+  }
+  .tag-size-5 {
+    font-size: 110%;
+    color: blue;
   }
 }

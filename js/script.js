@@ -222,3 +222,153 @@ function mealClickHandler(event){
 
   generateTitleLinks('data-meal="' + meal + '"');  
 }
+
+
+// cz. 5. Wyświetlanie chmury tagów w prawej kolumnie
+
+function calculateTagsParams(tags) {
+	const params =
+	{
+		min: 999999,
+		max: 0,
+	};
+	for(let tag in tags) {
+		console.log(tag + ' in used ' + tags[tag] + 'times');
+		if (tags[tag] > params.max){
+			params.max = tags[tag];
+		}
+		if (tags[tag] < params.min){
+			params.min = tags[tag];
+		}
+	}
+	return params;
+}
+
+const optTagsListSelector = '.tags.list' //by znaleźć listę tagów w prawej kol.
+
+function calculateTagClass(count, params){
+	const optCloudClassPrefix = 'tag-size-';
+	const optCloudClassCount = 5;
+	const normalizedCount = count - params.min;
+	const normalizedMax = params.max - params.min;
+	const percentage = normalizedCount / normalizedMax;
+	const classNumber = Math.floor( percentage * (optCloudClassCount - 1) + 1 );
+
+    console.log('count: ', count);
+    console.log('classNumber: ', classNumber);
+	
+	const tagClass = optCloudClassPrefix + classNumber;
+	console.log('tagClass: ', tagClass);
+	
+	return tagClass;
+}
+
+
+function generateTags(){
+  /* create a new variable allTags with an empty array */
+  let allTags = {};
+
+  const articles = document.querySelectorAll('.post');
+  for(let article of articles) {
+	const tagsWraper = article.querySelector(optArticleTagsSelector);
+
+	let html = '';
+
+	const articleTags = article.getAttribute('data-tags');
+
+    /* split tags into array */
+	const articleTagsArray = articleTags.split(' ');
+
+    /* for each tag */
+	for(let tag of articleTagsArray){
+
+      /* generate HTML of the link */
+	  const linkHTML = '<li><a href="#tag-' + tag + '"><span>' + tag + '</span></a></li>';
+      /* add generated code to html variable */
+	  html = html + linkHTML;
+
+      /* check if this link is NOT already in allTags */
+      if(!allTags[tag]) {
+        /* add tag to allTags object */
+        allTags[tag] = 1; // nie było tagu więc licznik wystąpień ustawiony na 1
+      } else {
+		  allTags[tag]++; // jeśli był już tag to zwiększa się licznik o 1
+	  }
+	}
+	tagsWraper.innerHTML = html;
+  }
+
+  /* find list of tags in right column */
+  const tagList = document.querySelector('.tags');
+  
+  const tagsParams = calculateTagsParams(allTags);
+  console.log('tagsParams:', tagsParams);
+  
+  /* create variable for all links HTML code */
+  let allTagsHTML = '';
+
+  /* START LOOP: for each tag in allTags: */
+  for(let tag in allTags){
+    	  
+    /* generate code of a link and add it to allTagsHTML */
+    const tagLinkHTML = '<li><a class="' + calculateTagClass(allTags[tag], tagsParams) + '" href="#tag-' + tag + '"><span>' + tag + ' (' + allTags[tag] + ')</span></a></li>';
+    console.log('tagLinkHTML:', tagLinkHTML);
+	
+    allTagsHTML += tagLinkHTML;
+  }
+  /* add HTML from allTagsHTML to tagList */
+  tagList.innerHTML = allTagsHTML;
+}
+generateTags();
+
+
+// cz. 5. Wygenerowanie listy rodzajów dań w prawej kolumnie, pod chmurą tagów
+
+const optMealsListSelector = '.meals.list' //by znaleźć listę rodzajów dań w prawej kol.
+
+function generateMeals(){
+	
+  /* create a new variable allMeals with an empty array */
+  let allMeals = { };
+
+  const articles = document.querySelectorAll('.post');
+  for(let article of articles) {
+	const mealWraper = article.querySelector('.post-meal'); // meals wrapper
+	
+	let html = '';
+	const meal = article.getAttribute('data-meal');
+	const linkHTML = '<a href="#' + meal + '"><span>' + meal + '</span></a>';
+	html = html + linkHTML;
+		
+	/*  check if this link is NOT already in allMeals */
+    if(!allMeals[meal]) {
+      /*  add tag to allMeals object */
+        allMeals[meal] = 1; // nie było rodz.dania więc licznik wystąpień ustawiony na 1
+      } else {
+		  allMeals[meal]++; // jeśli był już rodzaj dania to zwiększa się licznik o 1
+	  }
+
+    /* insert HTML of all the links into the meal wrapper */
+	mealWraper.innerHTML = html;
+  }
+  
+  /* find list of meals in right column */
+  const mealList = document.querySelector('.meals.list');
+  
+  /* create variable for all links HTML code */
+  let allMealsHTML = '';
+
+  /* START LOOP: for each tag in allTags: */
+  for(let meal in allMeals){
+    	  
+    /* generate code of a link and add it to allTagsHTML */
+    const mealLinkHTML = '<li><a href="#tag-' + meal + '"><span>' + meal + ' (' + allMeals[meal] + ')</span></a></li>';
+    console.log('mealLinkHTML:', mealLinkHTML);
+	
+    allMealsHTML += mealLinkHTML;
+  }
+
+  /* add HTML from allTagsHTML to tagList */
+  mealList.innerHTML = allMealsHTML;	
+}
+generateMeals();
