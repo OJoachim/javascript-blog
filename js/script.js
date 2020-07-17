@@ -1,4 +1,5 @@
 'use strict';
+
 const templates = {
   articleLink: Handlebars.compile(document.querySelector('#template-article-link').innerHTML)
 }
@@ -45,13 +46,13 @@ const titleClickHandler = function(event) {
 };
 
 
-/* 2 część skryptu - chcemy generować nową listę linków po każdym kliknięciu tagu lub autora */
+/* 2 część skryptu - chcemy generować nową listę linków po każdym kliknięciu tagu (ze składnikami) lub rodzaju dania */
 
 const optArticleSelector = '.post',
   optTitleSelector = '.post-title',
   optTitleListSelector = '.titles';
 
-function generateTitleLinks(customSelector = '') { //deklaracja
+function generateTitleLinks(customSelector = '') {
 
   /* [1] remove contents of titleList */
 		
@@ -83,70 +84,31 @@ function generateTitleLinks(customSelector = '') { //deklaracja
     	titleList.innerHTML = titleList.innerHTML + linkHTML;
   }
 
-
   const links = document.querySelectorAll('.titles a');
-
   for(let link of links) {
   		link.addEventListener('click', titleClickHandler);
   }
 
 }
-
-generateTitleLinks(); // wywołanie
-
+generateTitleLinks();
 
 
 // 3. część zadania, generowanie listy tagów;
 
 const optArticleTagsSelector = '.post-tags .list-horizontal' 
 
-function generateTags(){
-  /* find all articles */
-  const articles = document.querySelectorAll('.post');
-  
-  for(let article of articles) {
-
-    /* find tags wrapper */
-	const tagsWraper = article.querySelector(optArticleTagsSelector);
-  
-    /* make html variable with empty string */
-	let html = '';
-
-    /* get tags from data-tags attribute */
-	const articleTags = article.getAttribute('data-tags');
-	console.log('articleTags: ', articleTags);
-  
-    /* split tags into array */
-	const articleTagsArray = articleTags.split(' ');
-	console.log('tagsTable: ', articleTagsArray);
-    
-	for(let tag of articleTagsArray){
-		console.log('tag: ', tag);
-      
-	  const linkHTML = '<li><a href="#tag-' + tag + '"><span>' + tag + '</span></a></li>';
-	  console.log('linkHTML: ', linkHTML);
-
-	  tagsWraper.innerHTML = tagsWraper.innerHTML + linkHTML;
-	  console.log('tagsWraper: ', tagsWraper);
-	}
-  }
-}
-generateTags();
-
-
-// cz.3b. Akcja po kliknięciu w tag
-
+// Akcja po kliknięciu w tag składnika(dania)
 function tagClickHandler(event){
   event.preventDefault();
   const clickedElement = this;
   console.log('Link was clicked!');
 
-  /* make a new constant "href" and read the attribute "href" of the clicked element */
+  /* make a new constant "href", read the attribute "href" of the clicked element */
   const href = clickedElement.getAttribute('href');
 
-  /* make a new constant "tag" and extract tag from the "href" constant */
+  /* make a new constant "tag" and extract tag from the "href" constant, np. #tag-cebula -> cebula */
   const tag = href.replace('#tag-', '');
-  	console.log('TAG: ', tag);
+  console.log('TAG: ', tag);
 
   /* find all tag links with class active */
   const activeLinks = document.querySelectorAll('a.active[href^="#tag-"]');
@@ -156,28 +118,17 @@ function tagClickHandler(event){
   }
 
   /* find all tag links with "href" attribute equal to the "href" constant */
-  tagLinks = document.querySelector('+(href)+');
-
+  const tagLinks = document.querySelectorAll('a[href="#tag-' + href +'"]');
   for(let tagLink of tagLinks){
 	tagLink.classList.add('active');
   } 
-
-  function addClickListenersToTags(){
-    /* find all links to tags */    
-    const links = document.querySelectorAll('.list-horizontal');
-    for(let link of links) {
-	  link.addEventListener('click', tagClickHandler);
-    }
-  }
-  addClickListenersToTags();
   
  /* execute function "generateTitleLinks" with article selector as argument */
   generateTitleLinks('[data-tags~="' + tag + '"]');  
 }
 
 
-// cz.4. dodanie listy Rodzaje dań
-
+// cz.4. dodanie listy: Rodzaje dań
 function generateMeal(){
   const articles = document.querySelectorAll(optArticleSelector); 
   
@@ -190,8 +141,7 @@ function generateMeal(){
 }
 generateMeal();
 
-// cz.4b. Akcja po kliknięciu w danie (meal)
-
+// Akcja po kliknięciu w rodzaj dania (meal)
 function mealClickHandler(event){
   event.preventDefault();
   const clickedElement = this;
@@ -201,18 +151,18 @@ function mealClickHandler(event){
   const href = clickedElement.getAttribute('href');
   console.log('href: ', href);
 
-  /* make a new constant "meal" and extract tag from the "href" constant */
-  const meal = href.replace('#', '');
+  /* make a new constant "meal" and extract meal from the "href" constant */
+  const meal = href.replace('#meal-', '');
 
   const activeLinks = document.querySelectorAll('.post-meal a.active');
   for(let activeLink of activeLinks) {
 	activeLink.classList.remove('active');
   }
 
-  /* find all tag links with "href" attribute equal to the "href" constant */
-  mealLinks = document.querySelector('+ href +');
+  /* find all meal links with "href" attribute equal to the "href" constant */
+  const mealLinks = document.querySelectorAll('a[href="#meal-'+ href +'"]');
   
-  for(let mealLink of mealLinks){  //LOOP: for each found tag link
+  for(let mealLink of mealLinks){
 	mealLink.classList.add('active');
   }
 
@@ -224,7 +174,7 @@ function mealClickHandler(event){
   }
   addClickListenersToMeal();
 
-  generateTitleLinks('data-meal="' + meal + '"');  
+  generateTitleLinks('[data-meal="' + meal + '"]');  
 }
 
 
@@ -267,8 +217,7 @@ function calculateTagClass(count, params){
 	return tagClass;
 }
 
-
-function generateTags(){
+function generateTagsCloud(){
   /* create a new variable allTags with an empty array */
   let allTags = {};
 
@@ -322,11 +271,18 @@ function generateTags(){
   }
   /* add HTML from allTagsHTML to tagList */
   tagList.innerHTML = allTagsHTML;
+
+  const links = document.querySelectorAll('a[href^="#tag-"]');
+
+  for(let link of links) {
+  	link.addEventListener('click', tagClickHandler);
+  }
+
 }
-generateTags();
+generateTagsCloud();
 
 
-// cz. 5. Wygenerowanie listy rodzajów dań w prawej kolumnie, pod chmurą tagów
+// cz. 6. Wygenerowanie listy rodzajów dań w prawej kolumnie, pod chmurą tagów
 
 const optMealsListSelector = '.meals.list' //by znaleźć listę rodzajów dań w prawej kol.
 
@@ -366,7 +322,7 @@ function generateMeals(){
   for(let meal in allMeals){
     	  
     /* generate code of a link and add it to allTagsHTML */
-    const mealLinkHTML = '<li><a href="#tag-' + meal + '"><span>' + meal + ' (' + allMeals[meal] + ')</span></a></li>';
+    const mealLinkHTML = '<li><a href="#meal-' + meal + '"><span>' + meal + ' (' + allMeals[meal] + ')</span></a></li>';
     console.log('mealLinkHTML:', mealLinkHTML);
 	
     allMealsHTML += mealLinkHTML;
@@ -374,5 +330,11 @@ function generateMeals(){
 
   /* add HTML from allTagsHTML to tagList */
   mealList.innerHTML = allMealsHTML;	
+
+  const links = document.querySelectorAll('a[href^="#meal-"]');
+
+  for(let link of links) {
+  	link.addEventListener('click', mealClickHandler);
+  }
 }
 generateMeals();
