@@ -89,6 +89,22 @@
 		<script id="template-article-link" type="text/x-handlebars-template">
 			<li><a href="#{{ id }}"><span>{{ title }}</span></a></li>
 		</script>
+		<script id="template-tag-link" type="text/x-handlebars-template">
+			<li><a href="#tag-{{ tag }}"><span>{{ tag }}</span></a></li>
+		</script>
+		<script id="template-meal-inarticle-link" type="text/x-handlebars-template">
+			<a href="#meal-{{ meal }}"><span>{{ meal }}</span></a>
+		</script>
+		<script id="template-meal-link" type="text/x-handlebars-template">
+            {{#each meals}}
+			<li><a href="#meal-{{ meal }}"><span>{{ meal }} {{count}}</span></a></li>
+			{{/each}}
+        </script>
+        <script id="template-cloudtag-link" type="text/x-handlebars-template">
+            {{#each tags}}
+			<li><a class="{{ className }}" href="#tag-{{ tag }}"><span>{{ tag }} {{count}}</span></a></li>
+			{{/each}}
+        </script>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.1.0/handlebars.min.js"></script>
 		<script src="js/script.js"></script>
 	</body> 

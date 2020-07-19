@@ -1,4 +1,11 @@
 'use strict';
+const templates = {
+  articleLink: Handlebars.compile(document.querySelector('#template-article-link').innerHTML), //title of articles
+  tagLink: Handlebars.compile(document.querySelector('#template-tag-link').innerHTML), //tag-list after article-contents
+  mealInArticleLink: Handlebars.compile(document.querySelector('#template-meal-inarticle-link').innerHTML), //meal-kind before article-contents
+  tagCloudLink: Handlebars.compile(document.querySelector('#template-cloudtag-link').innerHTML), //tag-cloud in right col.
+  mealLink: Handlebars.compile(document.querySelector('#template-meal-link').innerHTML) //meal-kind-list in right col.
+}
 
 const titleClickHandler = function(event) {
   event.preventDefault();
@@ -59,8 +66,9 @@ function generateTitleLinks(customSelector = '') {
     const articleTitle = article.querySelector(optTitleSelector).innerHTML;
 
     /* [-2c-] create HTML of the link & insert link into titleList */
-    const linkHTML = '<li><a href="#' + articleId + '"><span>' + articleTitle + '</span></a></li>';
-    	titleList.innerHTML = titleList.innerHTML + linkHTML;
+    const linkHTMLData = {id: articleId, title: articleTitle};
+    const linkHTML = templates.articleLink(linkHTMLData);
+    titleList.innerHTML = titleList.innerHTML + linkHTML;
   }
 
   const links = document.querySelectorAll('.titles a');
@@ -161,7 +169,9 @@ function generateTagsCloud(){
 	for(let tag of articleTagsArray){
 
       /* generate HTML of the link */
-	  const linkHTML = '<li><a href="#tag-' + tag + '"><span>' + tag + '</span></a></li>';
+	  const linkHTMLData = {href: '#tag-' + tag, tag: tag};
+      const linkHTML = templates.tagLink(linkHTMLData);
+
       /* add generated code to html variable */
 	  html = html + linkHTML;
 
@@ -183,7 +193,7 @@ function generateTagsCloud(){
   console.log('tagsParams:', tagsParams);
   
   /* create variable for all links HTML code */
-  let allTagsHTML = '';
+  const allTagsData = {tags: []};
 
   /* START LOOP: for each tag in allTags: */
   for(let tag in allTags){
@@ -192,11 +202,15 @@ function generateTagsCloud(){
     const tagLinkHTML = '<li><a class="' + calculateTagClass(allTags[tag], tagsParams) + '" href="#tag-' + tag + '"><span>' + tag + ' (' + allTags[tag] + ')</span></a></li>';
     console.log('tagLinkHTML:', tagLinkHTML);
 	
-    allTagsHTML += tagLinkHTML;
+    allTagsData.tags.push({
+    tag: tag,
+    count: allTags[tag],
+    className: calculateTagClass(allTags[tag], tagsParams)
+}   );
   }
 
   /* add HTML from allTagsHTML to tagList */
-  tagList.innerHTML = allTagsHTML;
+  tagList.innerHTML = templates.tagCloudLink(allTagsData);
 
   const links = document.querySelectorAll('a[href^="#tag-"]');
   for(let link of links) {
@@ -257,7 +271,8 @@ function generateMeals(){
 	
 	let html = '';
 	const meal = article.getAttribute('data-meal');
-	const linkHTML = '<a href="#meal-' + meal + '"><span>' + meal + '</span></a>';
+	const linkHTMLData = {href: '#meal-' + meal, meal: meal};
+    const linkHTML = templates.mealInArticleLink(linkHTMLData);
 	html = html + linkHTML;
 		
 	/*  check if this link is NOT already in allMeals */
@@ -276,7 +291,7 @@ function generateMeals(){
   const mealList = document.querySelector('.meals.list');
   
   /* create variable for all links HTML code */
-  let allMealsHTML = '';
+  const allMealsData = {meals: []};
 
   /* START LOOP: for each tag in allTags: */
   for(let meal in allMeals){
@@ -285,11 +300,14 @@ function generateMeals(){
     const mealLinkHTML = '<li><a href="#meal-' + meal + '"><span>' + meal + ' (' + allMeals[meal] + ')</span></a></li>';
     console.log('mealLinkHTML:', mealLinkHTML);
 	
-    allMealsHTML += mealLinkHTML;
+    allMealsData.meals.push({
+    meal: meal,
+    count: allMeals[meal]
+}   );
   }
 
   /* add HTML from allTagsHTML to mealList */
-  mealList.innerHTML = allMealsHTML;	
+  mealList.innerHTML = templates.mealLink(allMealsData);	
 
   const links = document.querySelectorAll('a[href^="#meal-"]');
 
